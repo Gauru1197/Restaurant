@@ -1,0 +1,38 @@
+.bookings-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+  }
+  
+  th, td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: center;
+  }
+  
+  th {
+    background-color: #f7f7f7;
+    font-weight: bold;
+  }
+  
+  .cancel-btn {
+    background-color: #e74c3c;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  .cancel-btn:hover {
+    background-color: #c0392b;
+  }
+  
+  /* Additional styles for booking management can be added here */
+  

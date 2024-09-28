@@ -1,0 +1,377 @@
+ const [name, setName] = useState("");
+  const [people, setPeople] = useState("");
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [orders, setOrders] = useState("");
+  useEffect(() => {
+    Aos.init({ duration: 2000 });
+  });
+  // let order = localStorage.getItem("order");
+  let clickHandler=() =>{
+    localStorage.removeItem('order')
+    setOrders(null);
+  }
+  let order = JSON.parse(localStorage.getItem('order'));
+  console.log("orders", order);
+//   let {nameF, peopleF, dateF,timeF} =  order;
+//  setOrders({nameF,peopleF,timeF,dateF});
+//  console.log("orders", orders);
+  return (
+    <> 
+     <div>
+     {order ? 
+       <table className="table">
+         <thead>
+           <tr>
+             <th scope="col">#</th>
+             <th scope="col">Name</th>
+             <th scope="col">No. of People</th>
+             <th scope="col">Date</th>
+             <th scope="col">Time</th>
+             <th scope="col">Cancel</th>
+           </tr>
+         </thead>
+         <tbody>
+       {/* {order && Object.keys(order).map((key, index) => (           */}
+         <tr>
+          <th scope="row">{1}</th>
+          <td> {order.name}</td>
+          <td> {order.people}</td>
+          <td> {order.date}</td>
+          <td> {order.time}</td>
+          <td> <button className="cancel-button" type="submit" onClick={clickHandler}>Cancel</button></td>
+         </tr>
+                {/* ))} */}
+         </tbody>
+       </table> : <p className="no-booking">No Bookings yet</p>
+     }
+     </div>
+
+    </>
+    
+  );
+
+
+/////////////////enhanced code/////////////
+ const [bookings, setBookings] = useState([]);
+  useEffect(() => {
+    Aos.init({ duration: 2000 });
+  });
+
+  useEffect(() => {
+    const storedBookings = JSON.parse(localStorage.getItem("bookings"));
+    if (storedBookings) {
+      setBookings(storedBookings);
+    }
+  }, []);
+
+  const clickHandler = (index) => {
+    const updatedBookings = bookings.filter((booking, i) => i !== index);
+    localStorage.setItem("bookings", JSON.stringify(updatedBookings));
+    setBookings(updatedBookings);
+  };
+
+  return (
+    <div>
+      {bookings.length > 0 ? (
+        <table className="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">No. of People</th>
+              <th scope="col">Date</th>
+              <th scope="col">Time</th>
+              <th scope="col">Cancel</th>
+            </tr>
+          </thead>
+          <tbody>
+            {bookings.map((booking, index) => (
+              <tr key={index}>
+                <th scope="row">{index + 1}</th>
+                <td>{booking.name}</td>
+                <td>{booking.people}</td>
+                <td>{booking.date}</td>
+                <td>{booking.time}</td>
+                <td>
+                  <button
+                    className="cancel-button"
+                    type="button"
+                    onClick={() => clickHandler(index)}
+                  >
+                    Cancel
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <p className="no-booking">No Bookings yet</p>
+      )}
+    </div>
+  );
+////////////////Original unenhanced code////////////////////////
+
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+function Signup() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
+  const navigate = useNavigate();
+
+  let clickHandler = async () => {
+    if (!name || !password || !email) {
+      setError(true);
+      return false;
+    }
+    
+  if (!/^[A-Za-z ]+$/.test(name)) {
+    setError(true);
+    return false;
+  }
+
+  if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/.test(email)) {
+    setError(true);
+    return false;
+  }
+
+  if (!/(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,}/.test(password)) {
+    setError(true);
+    return false;
+  }
+
+    let result = await fetch("http://localhost:5000/signup", {
+      method: "post",
+      body: JSON.stringify({ name, email, password }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    result = await result.json();
+    console.log(result);
+    localStorage.setItem("user1", JSON.stringify(result));
+    navigate("/");
+  };
+
+  return (
+    <div className="signup">
+      <br />
+      <br />
+      <form style={{ padding: "2em" }} onSubmit={(e) => e.preventDefault()}>
+        <div className="mb-3">
+          <label htmlFor="exampleInputEmail1" className="form-label">
+            User Name
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            /* id="exampleInputEmail1"  */ aria-describedby="emailHelp"
+            placeholder="Mandeep Sallan"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            autoFocus
+          />
+          {error && !name && (
+            <span
+              id="emailHelp"
+              className="form-text"
+              style={{ color: "red", fontSize: "15px" }}
+            >
+              Please enter a valid name
+            </span>
+          )}
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="exampleInputEmail1" className="form-label">
+            Email address
+          </label>
+          <input
+            type="email"
+            className="form-control"
+            id="exampleInputEmail1"
+            aria-describedby="emailHelp"
+            placeholder="itsonlymandeep@gmail.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <div id="emailHelp" className="form-text">
+            We'll never share your email with anyone else.
+          </div>
+          {error && !email && (
+            <span
+              id="emailHelp"
+              className="form-text"
+              style={{ color: "red", fontSize: "15px" }}
+            >
+              Please enter email
+            </span>
+          )}
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="exampleInputPassword1" className="form-label">
+            Password
+          </label>
+          <input
+            type="password"
+            className="form-control"
+            id="exampleInputPassword1"
+            placeholder="M345@$hjk"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <div id="emailHelp" className="form-text">
+            Password must contain special characters,digits and atleast one
+            capital letter.
+          </div>
+          {error && !password && (
+            <span
+              id="emailHelp"
+              className="form-text"
+              style={{ color: "red", fontSize: "15px" }}
+            >
+              Please enter password
+            </span>
+          )}
+        </div>
+
+        <button type="submit" className="btn signup-btn" onClick={clickHandler}>
+          Sign Up!
+        </button>
+      </form>
+    </div>
+  );
+}
+
+export default Signup;
+/////////////////////////////////////ENHANCED CODE 1/////////////////////
+
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+function Signup() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [nameError, setNameError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const navigate = useNavigate();
+
+  const clickHandler = async () => {
+    setNameError("");
+    setEmailError("");
+    setPasswordError("");
+
+    if (!name) {
+      setNameError("Please enter your name");
+      return;
+    }
+
+    if (!/^[A-Za-z ]+$/.test(name)) {
+      setNameError("Name should only contain letters");
+      return;
+    }
+
+    if (!email) {
+      setEmailError("Please enter your email");
+      return;
+    }
+
+    if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/.test(email)) {
+      setEmailError("Please enter a valid email address");
+      return;
+    }
+
+    if (!password) {
+      setPasswordError("Please enter your password");
+      return;
+    }
+
+    if (!/(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,}/.test(password)) {
+      setPasswordError(
+        "Password must contain special characters, digits, and at least one capital letter"
+      );
+      return;
+    }
+
+    const result = await fetch("http://localhost:5000/signup", {
+      method: "post",
+      body: JSON.stringify({ name, email, password }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const response = await result.json();
+    console.log(response);
+    localStorage.setItem("user1", JSON.stringify(response));
+    navigate("/");
+  };
+
+  return (
+    <div className="signup">
+      <form style={{ padding: "2em" }} onSubmit={(e) => e.preventDefault()}>
+        <div className="mb-3">
+          <label htmlFor="name" className="form-label">
+            User Name
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="name"
+            placeholder="Mandeep Sallan"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            autoFocus
+          />
+          <div className="error-message">{nameError}</div>
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="email" className="form-label">
+            Email address
+          </label>
+          <input
+            type="email"
+            className="form-control"
+            id="email"
+            placeholder="itsonlymandeep@gmail.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <div className="error-message">{emailError}</div>
+          <div className="form-text">We'll never share your email with anyone else.</div>
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="password" className="form-label">
+            Password
+          </label>
+          <input
+            type="password"
+            className="form-control"
+            id="password"
+            placeholder="M345@$hjk"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <div className="error-message">{passwordError}</div>
+          <div className="form-text">
+            Password must contain special characters, digits, and at least one capital letter.
+          </div>
+        </div>
+
+        <button type="submit" className="btn signup-btn" onClick={clickHandler}>
+          Sign Up!
+        </button>
+      </form>
+    </div>
+  );
+}
+
+export default Signup;

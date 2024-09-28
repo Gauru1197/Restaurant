@@ -1,0 +1,29 @@
+.dashboard-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .dashboard-title {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .logout-btn {
+    background-color: #e74c3c;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .logout-btn:hover {
+    background-color: #c0392b;
+  }
+  
+  /* Additional styles for dashboard widgets or components can be added here */
+  

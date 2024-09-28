@@ -1,0 +1,22 @@
+.no-booking {
+    margin-top: 278px;
+    border: 2px solid lightskyblue;
+    border-radius: 10px;
+    /* width: 131px; */
+}
+/* MyBookings.css */
+
+/* Styling for the "Cancel" button */
+.cancel-button {
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  .cancel-button:hover {
+    background-color: #c9302c;
+  }
